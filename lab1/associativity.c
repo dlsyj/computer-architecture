@@ -10,7 +10,7 @@
 
 uint64_t* data;
 
-void init(uint64_t mask) {
+void init(uint64_t mask) { // Initialize memory
     int num = CACHE_SIZE / mask;
     uint64_t* cur = data;
     while (--num) {

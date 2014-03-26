@@ -8,7 +8,7 @@
 
 uint64_t* data;
 
-void init(int elemNum, int stride) {
+void init(int elemNum, int stride) { // Initialize memory
     int i;
     for (i = 0; i < (elemNum >> 1); i += stride) {
         data[i] = (uint64_t) &data[i + (elemNum >> 1)];

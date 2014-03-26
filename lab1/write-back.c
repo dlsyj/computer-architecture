@@ -11,7 +11,7 @@
 
 uint64_t* data;
 
-void init(uint64_t size) {
+void init(uint64_t size) { // Initialize memory
     int i;
     for (i = 0; i < size / sizeof(uint64_t); i += BLOCK_SIZE / sizeof(uint64_t)) {
         data[i] = (uint64_t) &data[i + BLOCK_SIZE / sizeof(uint64_t)];
@@ -22,6 +22,7 @@ void init(uint64_t size) {
 inline void test() {
     uint64_t* cur = data;
     while (*cur) {
+        ++*(cur + 1);
         cur = (uint64_t*) *cur;
     }
 }

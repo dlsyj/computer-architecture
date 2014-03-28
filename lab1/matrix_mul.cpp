@@ -1,88 +1,94 @@
-#include <iostream>   
+#include <iostream>
 #include <vector>
 #include <time.h>
 #include <stdlib.h>
 #include <string.h>
-using   namespace   std;   
+using   namespace   std;
 
 int main()
 {
-	clock_t start, finish;
-	clock_t start1, finish1;
+    clock_t start, finish;
+    clock_t start1, finish1;
 
-	int i,j,k;
-	//³õÊ¼»¯Á½¸ö1000*1000µÄ¾ØÕó
-	int (*a)[1000],(*b)[1000];
-	a = new int[1000][1000];
-	b = new int[1000][1000];
-    
-	
-	for(i = 0; i < 1000; i++)
-	{
-		for(j = 0; j < 1000; j++)
-		{
-			a[i][j] = i % (j+1);
-			b[i][j] = i / (j+1);
-		}
-	}
-	//´æ·ÅA*BµÄ½á¹û
-	int (*c)[1000],(*d)[1000];
-	c = new int[1000][1000];
-	d = new int[1000][1000];
-
-	//³õÊ¼»¯Îª0
-	memset(c,0, 1000*1000*sizeof(int));
-	memset(d,0, 1000*1000*sizeof(int));
-
-	start = clock();	
-	for(i = 0; i < 1000; i++)
-	{
-		for(j = 0; j < 1000; j++)
-		{
-			for (k = 0; k < 1000; k++)
-			{
-				c[i][j] += a[i][k] * b[k][j];
-			}
-
-		}
-	}
-	finish = clock();
-
-	start1 = clock();
-
-	//¿ÉÒÔÐÞ¸ÄµÄ²¿·Ö  ¿ªÊ¼
-	//======================================================
-	for(i = 0; i < 1000; ++i) {
-		for(k = 0; k < 1000; ++k) {
-            int r = a[i][k];
-			for (j = 0; j < 1000; ++j) {
-				d[i][j] += r * b[k][j];
-			}
-		}
-	}
-	//¿ÉÒÔÐÞ¸ÄµÄ²¿·Ö   ½áÊø
-	//======================================================
-	finish1 = clock();
+    int i,j,k;
+    //åˆå§‹åŒ–ä¸¤ä¸ª1000*1000çš„çŸ©é˜µ
+    int (*a)[1000],(*b)[1000];
+    a = new int[1000][1000];
+    b = new int[1000][1000];
 
 
+    for(i = 0; i < 1000; i++)
+    {
+        for(j = 0; j < 1000; j++)
+        {
+            a[i][j] = i % (j+1);
+            b[i][j] = i / (j+1);
+        }
+    }
+    //å­˜æ”¾A*Bçš„ç»“æžœ
+    int (*c)[1000],(*d)[1000];
+    c = new int[1000][1000];
+    d = new int[1000][1000];
 
-	//¶Ô±ÈÁ½´ÎµÄ½á¹û
-	for(i = 0; i < 1000; i++)
-	{
-		for(j = 0; j < 1000; j++)
-		{
-			if (c[i][j] != d[i][j])
-			{
-				cout<<"you have got an error in algorithm modification!"<<endl;
-				exit(1);
-			}
+    //åˆå§‹åŒ–ä¸º0
+    memset(c,0, 1000*1000*sizeof(int));
+    memset(d,0, 1000*1000*sizeof(int));
 
-		}
-	}
+    start = clock();
+    for(i = 0; i < 1000; i++)
+    {
+        for(j = 0; j < 1000; j++)
+        {
+            for (k = 0; k < 1000; k++)
+            {
+                c[i][j] += a[i][k] * b[k][j];
+            }
+
+        }
+    }
+    finish = clock();
+
+    start1 = clock();
+
+    //å¯ä»¥ä¿®æ”¹çš„éƒ¨åˆ†  å¼€å§‹
+    //======================================================
+    for(i = 0; i < 1000; i += 4) {
+        for(k = 0; k < 1000; ++k) {
+            int r0 = a[i][k];
+            int r1 = a[i + 1][k];
+            int r2 = a[i + 2][k];
+            int r3 = a[i + 3][k];
+            for (j = 0; j < 1000; ++j) {
+                d[i][j] += r0 * b[k][j];
+                d[i + 1][j] += r1 * b[k][j];
+                d[i + 2][j] += r2 * b[k][j];
+                d[i + 3][j] += r3 * b[k][j];
+            }
+        }
+    }
+    //å¯ä»¥ä¿®æ”¹çš„éƒ¨åˆ†   ç»“æŸ
+    //======================================================
+    finish1 = clock();
 
 
 
-	cout<<"time spent for original method : "<<finish - start<<" ms"<<endl;
-	cout<<"time spent for new method : "<<finish1 - start1<<" ms"<<endl;
-	return 0;
+    //å¯¹æ¯”ä¸¤æ¬¡çš„ç»“æžœ
+    for(i = 0; i < 1000; i++)
+    {
+        for(j = 0; j < 1000; j++)
+        {
+            if (c[i][j] != d[i][j])
+            {
+                cout<<"you have got an error in algorithm modification!"<<endl;
+                exit(1);
+            }
+
+        }
+    }
+
+
+
+    cout<<"time spent for original method : "<<finish - start<<" ms"<<endl;
+    cout<<"time spent for new method : "<<finish1 - start1<<" ms"<<endl;
+    return 0;
 }

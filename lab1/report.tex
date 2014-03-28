@@ -133,8 +133,15 @@
 
     所以只要采用$kij$或者$ikj$方式,就能大幅利用空间局部性提高效率.
 
-    程序源代码为\texttt{matrix\_mul.cpp}.程序输出如图\ref{fig9}所示.经测试使用原来的方法耗时\SI{8292664}{\ms},使用$ikj$方式只需\SI{2781312}{\ms},时间减少
+    改进后程序输出如图\ref{fig9}所示.经测试使用原来的方法耗时\SI{8292664}{\ms},使用$ikj$方式只需\SI{2781312}{\ms},时间减少
     $66.46\%$.
+
+    为了进一步提高程序的运行效率,可以采用矩阵分块的思想,增大空间局部性.$A$为$1000\times 1000$的矩阵,每个元素占$4$B,一行为$4000$B.
+    考虑到一级缓存为$32$KB,分到$A$, $B$, $C$三个矩阵上,每个矩阵大概可以利用$10$KB.所以在$ikj$的方式上进一步改进,每次对$i$, $i+1$, $i+2$,
+    $i+3$同时操作,降低$B$的重复读取的次数.这时的程序源代码为\texttt{matrix\_mul.cpp},程序输出如图\ref{fig10}所示,时间减少$71.77\%$.
+
+    如果还想进一步优化,可以使用编译器的优化参数\texttt{-O3},得到程序输出如图\ref{fig11}所示,时间减少达到$95.98\%$,性能提升巨大.可能因为
+    循环次数是常数,编译器直接进行循环展开,再加上其它一些优化,才能得到这样的结果.
 
     \begin{table}[htbp]
       \caption{矩阵乘法效率}
@@ -151,8 +158,20 @@
 
     \begin{figure}[htbp]
       \includegraphics[width=12cm]{9.png}
-      \caption{优化矩阵乘法程序输出}
+      \caption{优化矩阵乘法程序输出一}
       \label{fig9}
+    \end{figure}
+
+    \begin{figure}[htbp]
+      \includegraphics[width=12cm]{10.png}
+      \caption{优化矩阵乘法程序输出二}
+      \label{fig10}
+    \end{figure}
+
+    \begin{figure}[htbp]
+      \includegraphics[width=12cm]{11.png}
+      \caption{优化矩阵乘法程序输出三}
+      \label{fig11}
     \end{figure}
     \clearpage
   \section{测量数据缓存的写策略}

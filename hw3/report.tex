@@ -12,7 +12,7 @@
   unicode = true
 }
 \lstset{
-  language = C++,
+  language = C,
   basicstyle = \small\ttfamily,
   keywordstyle = \small\ttfamily\color{red},
   stringstyle = \color{gray},
@@ -74,7 +74,7 @@
     \[
       TP=\frac{6}{30\Delta t}=\frac{1}{5\Delta t}.
     \]
-    
+
     实际吞吐率总是小于理论上的最大吞吐率,这个结论得到验证.
   \section*{3.10}
     使用相同的流程,首先根据预约表得到禁止表
@@ -124,18 +124,18 @@
     如果不使用任何其他定向硬件,可以画出流水线时空图如下.进行一次循环需要$18$个时钟周期,并且两次循环只有$1$个时钟周期的重叠.根据程序源代码不难算出总共需要循环$99$
     次,所以整体执行需要$98\times (18-1)+18=1684$个时钟周期.
 
-    这里用I表示IF, D表示ID, E表示EX, M表示MEM, W表示WB, s表示stall.
+    这里用I表示IF, D表示ID, E表示EX, M表示MEM, W表示WB.
 
     {\footnotesize
       \center{
         \begin{tabular}{l||c|c|c|c|c|c|c|c|c|c|c|c|c|c|c|c|c|c}
           LW        & I & D & E & M & W & ~ & ~ & ~ & ~ & ~ & ~ & ~ & ~ & ~ & ~ & ~ & ~ & ~ \\
-          DADDIU R1 & ~ & I & s & s & D & E & M & W & ~ & ~ & ~ & ~ & ~ & ~ & ~ & ~ & ~ & ~ \\
-          SW        & ~ & ~ & ~ & ~ & I & s & s & D & E & M & W & ~ & ~ & ~ & ~ & ~ & ~ & ~ \\
+          DADDIU R1 & ~ & I & I & I & D & E & M & W & ~ & ~ & ~ & ~ & ~ & ~ & ~ & ~ & ~ & ~ \\
+          SW        & ~ & ~ & ~ & ~ & I & I & I & D & E & M & W & ~ & ~ & ~ & ~ & ~ & ~ & ~ \\
           DADDIU R2 & ~ & ~ & ~ & ~ & ~ & ~ & ~ & I & D & E & M & W & ~ & ~ & ~ & ~ & ~ & ~ \\
-          DSUB      & ~ & ~ & ~ & ~ & ~ & ~ & ~ & ~ & I & s & s & D & E & M & W & ~ & ~ & ~ \\
-          BNEZ      & ~ & ~ & ~ & ~ & ~ & ~ & ~ & ~ & ~ & ~ & ~ & I & s & s & D & E & M & W \\
-          LW2       & ~ & ~ & ~ & ~ & ~ & ~ & ~ & ~ & ~ & ~ & ~ & ~ & ~ & ~ & I & s & s & I \\
+          DSUB      & ~ & ~ & ~ & ~ & ~ & ~ & ~ & ~ & I & I & I & D & E & M & W & ~ & ~ & ~ \\
+          BNEZ      & ~ & ~ & ~ & ~ & ~ & ~ & ~ & ~ & ~ & ~ & ~ & I & I & I & D & E & M & W \\
+          LW2       & ~ & ~ & ~ & ~ & ~ & ~ & ~ & ~ & ~ & ~ & ~ & ~ & ~ & ~ & I & I & I & I \\
         \end{tabular}
       }
     }
@@ -147,7 +147,7 @@
       \center{
         \begin{tabular}{l||c|c|c|c|c|c|c|c|c|c|c}
           LW        & I & D & E & M & W & ~ & ~ & ~ & ~ & ~ & ~ \\
-          DADDIU R1 & ~ & I & D & s & E & M & W & ~ & ~ & ~ & ~ \\
+          DADDIU R1 & ~ & I & D & D & E & M & W & ~ & ~ & ~ & ~ \\
           SW        & ~ & ~ & ~ & I & D & E & M & W & ~ & ~ & ~ \\
           DADDIU R2 & ~ & ~ & ~ & ~ & I & D & E & M & W & ~ & ~ \\
           DSUB      & ~ & ~ & ~ & ~ & ~ & I & D & E & M & W & ~ \\
@@ -157,7 +157,7 @@
       }
     }
 
-    如果有一个单周期延迟分支.注意到现在仅有的stall来自LW的延迟,所以可以把LW指令放在BNEZ之前进行执行,把DADDIU R1放在BNEZ之后的延迟槽进行执行.由于循环的时候分支总是
+    如果有一个单周期延迟分支.注意到现在仅有的延迟来自LW,所以可以把LW指令放在BNEZ之前进行执行,把DADDIU R1放在BNEZ之后的延迟槽进行执行.由于循环的时候分支总是
     成功,这样就把LW和DADDIU R1之间的一个时钟周期的延迟利用了起来,延迟槽指令的结果也能每次都被采用.流水时空图如下.
 
     这样的话,一次循环只要$10$个时钟周期,两次循环有$4$个周期的重叠,中间循环的$98$次共需要$98\times (10-4)=588$个时钟周期.但是第一次循环的LW和DADDIU R1之间的延迟是
@@ -177,4 +177,14 @@
         \end{tabular}
       }
     }
+  \section*{Q1}
+    如果MEM阶段是load到寄存器B,且ID阶段要读寄存器B,那么需要定向.
+  \section*{Q2}
+    如果MEM阶段是load到寄存器r,且ID阶段是ALU指令读寄存器r,那么需在EX阶段插入气泡,并且ID阶段指令保留一个周期.
+  \section*{Q3}
+    只需要从内存中读取一个数存放到寄存器中,并且立马读取它,那么就会需要从MEM阶段定向过来.
+    很容易写出如下代码. \\
+    LW R1, 0(R2) \\
+    DADDIU, R1, R1, \#1
+
 \end{document}

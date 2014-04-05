@@ -70,11 +70,54 @@
       TP=\frac{1}{3.5\Delta t}=\frac{2}{7\Delta t}.
     \]
 
-    如果连续输出$6$个任务,分别相隔$2\Delta t, 5\Delta t, 2\Delta t, 5\Delta t, 2\Delta t, 5\Delta t$进入流水线,最后一个任务执行还需要时间$9\Delta t$,总共时间为$30\Delta t$.实际吞吐量为
+    如果连续输出$6$个任务,分别相隔$2\Delta t, 5\Delta t, 2\Delta t, 5\Delta t, 2\Delta t, 5\Delta t$进入流水线,最后一个任务执行还需要时间$9\Delta t$,总共时间为$30\Delta t$.实际吞吐率为
     \[
       TP=\frac{6}{30\Delta t}=\frac{1}{5\Delta t}.
     \]
     
-    实际吞吐量总是小于理论上的最大吞吐量,这个结论得到验证.
+    实际吞吐率总是小于理论上的最大吞吐率,这个结论得到验证.
   \section*{3.10}
+    使用相同的流程,首先根据预约表得到禁止表
+    \[
+      F=\{1,3,6\}.
+    \]
+
+    写出初始冲突向量
+    \[
+      C_{0}=(100101).
+    \]
+
+    再根据初始冲突向量可以画出状态转换图.
+
+    \begin{center}
+      \includegraphics[width=10cm]{3-crop.pdf}
+    \end{center}
+
+    可以看出允许不等时间间隔调度时,$(2,2,5)$是最优的调度策略,平均时间间隔是$3\Delta t$,可得到吞吐率
+    \[
+      TF=\frac{1}{3\Delta t}.
+    \]
+
+    等时间间隔调度时,最优调度策略是$(5)$,吞吐率
+    \[
+      TF=\frac{1}{5\Delta t}.
+    \]
+
+    连续输入$10$个任务时,采用不等时间间隔调度耗时$(2+2+5+2+2+5+2+2+5+2+7)\Delta t=36\Delta t$,实际吞吐率
+    \[
+      TF=\frac{10}{36\Delta t}=\frac{5}{18\Delta t},
+    \]
+    加速比为
+    \[
+      S=\frac{10\times 7\Delta t}{36\Delta t}=\frac{35}{18}.
+    \]
+
+    采用等时间间隔调度则耗时$(10\times 5+7)\Delta t=57\Delta t$,实际吞吐率
+    \[
+      TF=\frac{10}{57\Delta t},
+    \]
+    加速比为
+    \[
+      S=\frac{10\times 7\Delta t}{57\Delta t}=\frac{70}{57}.
+    \]
 \end{document}

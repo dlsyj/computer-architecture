@@ -8,7 +8,7 @@
 
 /////////////// STORAGE BUDGET JUSTIFICATION ////////////////
 // Total storage budget: 32KB + 17 bits
-// Total PHT counters: 2^17 
+// Total PHT counters: 2^17
 // Total PHT size = 2^17 * 2 bits/counter = 2^18 bits = 32KB
 // GHR size: 17 bits
 // Total Size = PHT size + GHR size
@@ -28,9 +28,9 @@ PREDICTOR::PREDICTOR(void){
   pht = new UINT32[numPhtEntries];
 
   for(UINT32 ii=0; ii< numPhtEntries; ii++){
-    pht[ii]=PHT_CTR_INIT; 
+    pht[ii]=PHT_CTR_INIT;
   }
-  
+
 }
 
 /////////////////////////////////////////////////////////////
@@ -40,13 +40,13 @@ bool   PREDICTOR::GetPrediction(UINT32 PC){
 
   UINT32 phtIndex   = (PC^ghr) % (numPhtEntries);
   UINT32 phtCounter = pht[phtIndex];
-  
+
   if(phtCounter > PHT_CTR_MAX/2){
-    return TAKEN; 
+    return TAKEN;
   }else{
-    return NOT_TAKEN; 
+    return NOT_TAKEN;
   }
-  
+
 }
 
 
@@ -70,7 +70,7 @@ void  PREDICTOR::UpdatePredictor(UINT32 PC, bool resolveDir, bool predDir, UINT3
   ghr = (ghr << 1);
 
   if(resolveDir == TAKEN){
-    ghr++; 
+    ghr++;
   }
 
 }

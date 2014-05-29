@@ -6,6 +6,7 @@
 
 class PREDICTOR {
 private:
+    UINT32 ghr;
     UINT32 m;
     UINT32 n;
     UINT32* localHistory;

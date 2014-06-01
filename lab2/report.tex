@@ -67,4 +67,35 @@
   \section{实验结果}
     在测试数据上达到了平均$4.605$的MPKI.对比同样使用$32$KB存储空间的gshare,其MPKI为$5.196$,相比降低了$11.4\%$.在每一个测试点上进行对比可以发现,并不是所有的测试点都比gshare好.大部分时候不相上下,或者有少量的减小.但是在某些测试点,比如
     LONG-SPEC2K6-06上,优化效果明显,使得最后整体成绩偏好.
+
+    因为在刚开始运行的时候,饱和计数器是统一初始化的.对于local分支预测机制来说,刚开始学习速度较快,能很快适应新的程序.但是
+    运行一段时间之后便达到了性能的上限. gshare分支预测机制虽然前期学习较慢,但是最后达到的效果更好.所以刚开始优先采用local分支
+    预测机制.运行一段时间之后,当local分支预测机制错误率上升,便开始采用gshare分支预测机制.
+
+    每个测试点的具体结果如下.
+
+    \begin{center}
+      \begin{tabular}{c|c||c|c}
+        LONG-SPEC2K6-00 & 3.544 & SHORT-FP-1 & 2.183 \\ \hline
+        LONG-SPEC2K6-01 & 7.766 & SHORT-FP-2 & 0.983 \\ \hline
+        LONG-SPEC2K6-02 & 4.753 & SHORT-FP-3 & 0.422 \\ \hline
+        LONG-SPEC2K6-03 & 4.922 & SHORT-FP-4 & 0.258 \\ \hline
+        LONG-SPEC2K6-04 & 9.530 & SHORT-FP-5 & 0.178 \\ \hline
+        LONG-SPEC2K6-05 & 5.315 & SHORT-INT-1 & 4.804 \\ \hline
+        LONG-SPEC2K6-06 & 1.578 & SHORT-INT-2 & 8.425 \\ \hline
+        LONG-SPEC2K6-07 & 16.540 & SHORT-INT-3 & 12.014 \\ \hline
+        LONG-SPEC2K6-08 & 1.246 & SHORT-INT-4 & 1.601 \\ \hline
+        LONG-SPEC2K6-09 & 4.952 & SHORT-INT-5 & 0.331 \\ \hline
+        LONG-SPEC2K6-10 & 3.142 & SHORT-MM-1 & 8.511 \\ \hline
+        LONG-SPEC2K6-11 & 0.739 & SHORT-MM-2 & 10.789 \\ \hline
+        LONG-SPEC2K6-12 & 12.854 & SHORT-MM-3 & 0.607 \\ \hline
+        LONG-SPEC2K6-13 & 11.310 & SHORT-MM-4 & 1.917 \\ \hline
+        LONG-SPEC2K6-14 & 1.200 & SHORT-MM-5 & 5.093 \\ \hline
+        LONG-SPEC2K6-15 & 1.978 & SHORT-SERV-1 & 3.706 \\ \hline
+        LONG-SPEC2K6-16 & 3.759 & SHORT-SERV-2 & 3.916 \\ \hline
+        LONG-SPEC2K6-17 & 5.119 & SHORT-SERV-3 & 5.140 \\ \hline
+        LONG-SPEC2K6-18 & 1.406 & SHORT-SERV-4 & 4.723 \\ \hline
+        LONG-SPEC2K6-19 & 2.295 & SHORT-SERV-5 & 4.665 \\
+      \end{tabular}
+    \end{center}
 \end{document}
